@@ -1,0 +1,32 @@
+{
+  "name": "afs-eng-wechat",
+  "type": "module",
+  "version": "0.0.1",
+  "private": true,
+  "description": "afs-eng-wechat",
+  "author": "",
+  "license": "ISC",
+  "keywords": [],
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "axios": "^0.27.2",
+    "lodash-es": "^4.17.21",
+    "vant": "^3.5.2",
+    "vue": "^3.2.37",
+    "vue-router": "^4.1.2"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^0.25.2",
+    "@types/node": "^18.0.5",
+    "@vitejs/plugin-vue": "^3.0.0",
+    "typescript": "^4.6.4",
+    "unplugin-vue-components": "^0.21.1",
+    "vite": "^3.0.0",
+    "vue-tsc": "^0.38.4"
+  }
+}
