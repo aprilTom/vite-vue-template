@@ -1,14 +1,27 @@
 <script setup lang="ts">
-const onClick = (e: any) => {
-  console.log('e', e)
-  console.log('import', import.meta.env)
-}
+import { onMounted } from 'vue'
+import { getUserInfo } from '@/api/home/index'
+import useCountStore from '@/store/count'
+
+const countStore = useCountStore()
+const handleRequest = () => { }
+onMounted(() => {
+  getUserInfo().then((res) => {
+    console.log('res', res)
+  })
+})
 </script>
 
 <template>
-  <div @click="onClick">
-    home page
-  </div>
+  <div>count: {{ countStore.count }}</div>
+  <button @click="countStore.setCount()">
+    +1
+  </button>
+
+  <!-- <div>{{ data }}</div> -->
+  <button @click="handleRequest">
+    request
+  </button>
 </template>
 
 <style scoped>

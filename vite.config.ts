@@ -6,12 +6,10 @@ import Components from 'unplugin-vue-components/vite'
 import { VantResolver } from 'unplugin-vue-components/resolvers'
 
 export default defineConfig({
-  server: {
-    port: 4000,
-  },
   resolve: {
     alias: {
-      src: resolve('./src'),
+      '@': resolve('./src'),
+      'utils': resolve('./src/utils'),
     },
   },
   plugins: [
@@ -30,5 +28,19 @@ export default defineConfig({
   ],
   esbuild: {
     drop: ['console', 'debugger'],
+  },
+  // TODO:
+  // optimizeDeps: {
+  //   include: ['vant', 'lodash-es'],
+  // },
+  server: {
+    port: 4000,
+    proxy: {
+      '/apply': {
+        target: 'http://10.18.113.181:31386/api/apply',
+        changeOrigin: true,
+        // rewrite: (path: string) => path.replace(/^\/api/, ''),
+      },
+    },
   },
 })
