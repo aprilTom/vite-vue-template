@@ -36,10 +36,11 @@ export default defineConfig({
   server: {
     port: 4000,
     proxy: {
-      '/apply': {
-        target: 'http://10.18.113.181:31386/api/apply',
+      '/admin': {
+        // target: 'http://10.18.113.181:31386/api/apply',
+        target: 'http://localhost:8090',
         changeOrigin: true,
-        // rewrite: (path: string) => path.replace(/^\/api/, ''),
+        rewrite: (path: string) => path.replace(/^\/apply/, ''),
       },
     },
   },

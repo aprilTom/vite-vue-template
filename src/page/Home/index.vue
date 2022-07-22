@@ -1,10 +1,19 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import { getUserInfo } from '@/api/home/index'
+import { Notify } from 'vant'
+import { getDemo, getUserInfo } from '@/api/home/index'
 import useCountStore from '@/store/count'
 
 const countStore = useCountStore()
-const handleRequest = () => { }
+
+const handleRequest = () => {
+  Notify({ type: 'warning', message: '提示' })
+}
+onMounted(() => {
+  // getDemo().then((res) => {
+  //   console.log('res', res)
+  // })
+})
 onMounted(() => {
   getUserInfo().then((res) => {
     console.log('res', res)
@@ -18,10 +27,11 @@ onMounted(() => {
     +1
   </button>
 
-  <!-- <div>{{ data }}</div> -->
-  <button @click="handleRequest">
+  <!-- <van-button type="primary">button</van-button> -->
+
+  <!-- <button @click="handleRequest">
     request
-  </button>
+  </button> -->
 </template>
 
 <style scoped>

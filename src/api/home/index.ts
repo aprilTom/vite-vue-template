@@ -6,3 +6,10 @@ export const getUserInfo = (params?: Record<string, any>) => {
     params,
   })
 }
+
+export const getDemo = (params?: Record<string, any>) => {
+  return axios({
+    url: '/apply/demo/get',
+    params,
+  })
+}
