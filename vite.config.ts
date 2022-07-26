@@ -1,14 +1,13 @@
 import { resolve } from 'path'
 import { defineConfig } from 'vite'
+import type { UserConfigExport } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import Components from 'unplugin-vue-components/vite'
 // import AutoImport from 'unplugin-auto-import/vite'
 import { VantResolver } from 'unplugin-vue-components/resolvers'
 
-export default defineConfig(({ command, mode }) => {
-  console.log('command', command)
-  console.log('mode', mode)
-  return {
+export default defineConfig(({ command }) => {
+  const config: UserConfigExport = {
     resolve: {
       alias: {
         '@': resolve('./src'),
@@ -29,9 +28,6 @@ export default defineConfig(({ command, mode }) => {
         resolvers: [VantResolver()],
       }),
     ],
-    // esbuild: {
-    //   drop: ['console', 'debugger'],
-    // },
     // TODO:
     // optimizeDeps: {
     //   include: ['vant', 'lodash-es'],
@@ -52,4 +48,10 @@ export default defineConfig(({ command, mode }) => {
       },
     },
   }
+  if (command === 'build') {
+    config.esbuild = {
+      drop: ['console', 'debugger'],
+    }
+  }
+  return config
 })
