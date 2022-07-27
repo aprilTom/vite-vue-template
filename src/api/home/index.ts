@@ -9,7 +9,7 @@ export const getUserInfo = (params?: Record<string, any>) => {
 
 export const getDemo = (params?: Record<string, any>) => {
   return axios({
-    url: 'local/admin/user/info',
+    url: '/admin/user/info',
     params,
   })
 }

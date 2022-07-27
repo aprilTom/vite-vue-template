@@ -33,7 +33,7 @@ export default defineConfig(({ command }) => {
     //   include: ['vant', 'lodash-es'],
     // },
     server: {
-      port: 8080,
+      port: 4000,
       proxy: {
         '/admin': {
           target: 'http://10.18.113.181:31386/api/apply',

@@ -1,4 +1,13 @@
+// import type { AxiosRequestHeaders } from 'axios'
 import axios from 'axios'
+import { Toast } from 'vant'
+import { v4 as uuid } from 'uuid'
+import useAppStore from '@/store/app'
+import router from '@/router'
+import { errorCode } from '@/constant'
+
+const appStore = useAppStore()
+let lastNoticeTime = new Date().getTime()
 
 const instance = axios.create({
   // baseURL: import.meta.env.VITE_BASE_URL,
@@ -7,14 +16,22 @@ const instance = axios.create({
   // withCredentials: true,
 })
 
+// interface Headers extends AxiosRequestHeaders {
+//   'access-token': string
+//   'tenant-id': string
+//   'a-request-id': string
+// }
+
 // 请求拦截
 instance.interceptors.request.use(
   (config) => {
     const params = config.params || {}
-    console.log('config', config)
+    const headers = config.headers || {}
 
-    params.timestramp = new Date().getTime()
-
+    params._afst = (new Date()).getTime()
+    // headers['access-token'] = appStore.access_token
+    headers['tenant-id'] = appStore.tenantId
+    headers['a-request-id'] = uuid().replace(/-/g, '')
     return config
   },
   error => Promise.reject(error),
@@ -24,26 +41,42 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
   (res) => {
     console.log('响应拦截', res)
-    // if (res.status === 200)
-    //   return Promise.reject('服务异常啊啊啊')
-
     const status = Number(res.status) || 200
+    const message = res.data.msg || errorCode[status] || errorCode.default
 
     if (status === 401 && res.config.url?.includes('userlogin')) {
-      console.log('401111111111')
+      // TODO: store.dispatch('CLEAN_SESSION')
+      Toast({ message: '登录已失效请重新登录' })
+      appStore.cleanSession()
+      router.push('/login')
       return
     }
 
     if (status === 403) {
-      console.log('4033333333333')
+      Toast({ message: '权限错误，您没有权限访问，请联系管理员' })
       return
+    }
+
+    if ((status !== 200 || res.data.code !== errorCode.SYS_CODE.SUCCESS) && !res.config.silent) {
+      if (res.data.code === errorCode.SYS_CODE.USER_KICK_OUT) {
+        Toast({ message: '登陆状态失效' })
+        router.push('/login')
+        return Promise.reject(new Error('登陆状态失效'))
+      }
+
+      if (((new Date()).getTime() - lastNoticeTime) > 300) {
+        lastNoticeTime = new Date().getTime()
+        Toast({ message })
+      }
     }
 
     return res
   },
-  (error) => {
-    console.log('响应拦截里的error函数', error)
-    return Promise.reject(error)
+  (axiosError) => {
+    const status = axiosError.response.status
+    const message = errorCode[status] || errorCode.default
+    Toast({ position: 'top', message })
+    return Promise.reject(axiosError)
   },
 )
 export default instance

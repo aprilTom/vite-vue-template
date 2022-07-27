@@ -11,17 +11,17 @@ const handleRequest = () => {
   Notify({ type: 'warning', message: '提示' })
 }
 onMounted(() => {
-  axios({
-    url: 'local/admin/user/info',
-    params: { id: '1234' },
-  }).then((res) => {
-    console.log('222 res', res)
-  })
-  // getDemo({ id: '1235' }).then((res) => {
-  //   console.log('getDemo/res', res)
-  // }).catch(err => {
-  //   console.log('getDemo/err', err);
+  // axios({
+  //   url: 'local/admin/user/info',
+  //   params: { id: '1234' },
+  // }).then((res) => {
+  //   console.log('222 res', res)
   // })
+  getDemo().then((res) => {
+    console.log('getDemo/res', res)
+  }).catch((err) => {
+    console.log('getDemo/err', err)
+  })
 })
 onMounted(() => {
   // getUserInfo().then((res) => {
