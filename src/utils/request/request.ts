@@ -1,4 +1,3 @@
-// import type { AxiosRequestHeaders } from 'axios'
 import axios from 'axios'
 import { Toast } from 'vant'
 import { v4 as uuid } from 'uuid'
@@ -16,12 +15,6 @@ const instance = axios.create({
   // withCredentials: true,
 })
 
-// interface Headers extends AxiosRequestHeaders {
-//   'access-token': string
-//   'tenant-id': string
-//   'a-request-id': string
-// }
-
 // 请求拦截
 instance.interceptors.request.use(
   (config) => {
@@ -29,7 +22,7 @@ instance.interceptors.request.use(
     const headers = config.headers || {}
 
     params._afst = (new Date()).getTime()
-    // headers['access-token'] = appStore.access_token
+    headers['access-token'] = appStore.access_token
     headers['tenant-id'] = appStore.tenantId
     headers['a-request-id'] = uuid().replace(/-/g, '')
     return config
@@ -40,7 +33,6 @@ instance.interceptors.request.use(
 // 响应拦截
 instance.interceptors.response.use(
   (res) => {
-    console.log('响应拦截', res)
     const status = Number(res.status) || 200
     const message = res.data.msg || errorCode[status] || errorCode.default
 
@@ -53,7 +45,7 @@ instance.interceptors.response.use(
     }
 
     if (status === 403) {
-      Toast({ message: '权限错误，您没有权限访问，请联系管理员' })
+      Toast({ message: '暂无权限' })
       return
     }
 
@@ -70,7 +62,7 @@ instance.interceptors.response.use(
       }
     }
 
-    return res
+    return res.data
   },
   (axiosError) => {
     const status = axiosError.response.status
@@ -79,4 +71,5 @@ instance.interceptors.response.use(
     return Promise.reject(axiosError)
   },
 )
+
 export default instance

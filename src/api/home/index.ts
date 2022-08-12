@@ -1,15 +1,11 @@
-import axios from '@/utils/request'
+import request from '@/utils/request'
 
-export const getUserInfo = (params?: Record<string, any>) => {
-  return axios({
-    url: '/admin/user/info',
-    params,
-  })
+interface DemoReq {
+  addr: string
 }
-
-export const getDemo = (params?: Record<string, any>) => {
-  return axios({
-    url: '/admin/user/info',
+export const getDemo = (params: DemoReq) => {
+  return request<number[]>({
+    url: '/localAfs/admin/user/info',
     params,
   })
 }
